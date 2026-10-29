@@ -1,0 +1,47 @@
+"""Common utilities."""
+
+from pathlib import Path
+from typing import Optional
+
+from telegram import Update
+
+import config
+
+
+def is_admin(update: Update) -> bool:
+    user = update.effective_user
+    if not user:
+        return False
+    return user.id in config.ADMIN_IDS
+
+
+def is_supported_format(filename: str) -> bool:
+    ext = Path(filename).suffix.lstrip(".").lower()
+    return ext in config.SUPPORTED_FORMATS
+
+
+def safe_filename(name: str, default: str = "video.mp4") -> str:
+    """Sanitize a filename for safe filesystem use."""
+    if not name:
+        return default
+    name = Path(name).name
+    # Remove dangerous characters
+    for ch in '<>:"/\\|?*\0':
+        name = name.replace(ch, "_")
+    name = name.strip(". ")
+    if not name or name in (".", ".."):
+        return default
+    return name[:200]
+
+
+def format_size(num_bytes: int) -> str:
+    for unit in ("B", "KB", "MB", "GB"):
+        if num_bytes < 1024:
+            return f"{num_bytes:.1f} {unit}"
+        num_bytes /= 1024
+    return f"{num_bytes:.1f} TB"
+
+
+def is_url(text: str) -> bool:
+    text = (text or "").strip().lower()
+    return text.startswith("http://") or text.startswith("https://")

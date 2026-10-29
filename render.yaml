@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: video-tool-bot
+    runtime: docker
+    plan: free
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: API_ID
+        sync: false
+      - key: API_HASH
+        sync: false
+      - key: TEMP_DIR
+        value: /tmp/video_bot
+    healthCheckPath: /
