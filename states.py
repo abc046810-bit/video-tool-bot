@@ -4,9 +4,8 @@ from enum import IntEnum, auto
 
 
 class BotState(IntEnum):
-    # Split
-    SPLIT_ENTER_DURATION = auto()
-    SPLIT_WAIT_INPUT = auto()
+    # Split – flexible: accept duration and/or video/link in any order
+    SPLIT_COLLECT = auto()
 
     # Merge
     MERGE_COLLECT = auto()
